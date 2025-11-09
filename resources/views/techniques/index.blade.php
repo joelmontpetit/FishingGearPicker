@@ -1,0 +1,59 @@
+@extends('layouts.app')
+
+@section('title', 'All Techniques - FishingGearPicker')
+@section('meta_description', 'Browse all fishing techniques and discover specialized fishing gear recommendations for each method.')
+
+@section('content')
+<!-- Breadcrumb -->
+<div style="background: var(--color-neutral-50); border-bottom: 1px solid var(--border-color); padding: var(--spacing-md) 0;">
+    <div class="container-custom">
+        <nav class="breadcrumb">
+            <a href="{{ route('home') }}">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Techniques</span>
+        </nav>
+    </div>
+</div>
+
+<!-- Header -->
+<div style="background: white; padding: var(--spacing-2xl) 0; border-bottom: 1px solid var(--border-color);">
+    <div class="container-custom">
+        <h1 style="font-size: var(--text-4xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-bottom: var(--spacing-sm);">
+            Fishing Techniques
+        </h1>
+        <p class="text-muted" style="font-size: var(--text-lg); max-width: 700px;">
+            Explore different fishing methods and find the perfect gear for each technique
+        </p>
+    </div>
+</div>
+
+<!-- Techniques Grid -->
+<div class="section" style="background: white;">
+    <div class="container-custom">
+        <div class="grid-cards">
+            @foreach($techniques as $technique)
+                <a href="{{ route('techniques.show', $technique->slug) }}" class="card" style="text-decoration: none;">
+                    <div class="card-content">
+                        <h3 style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-bottom: var(--spacing-md);">
+                            {{ $technique->name }}
+                        </h3>
+                        
+                        <p class="text-muted line-clamp-3" style="font-size: var(--text-base); margin-bottom: var(--spacing-md);">
+                            {{ $technique->description }}
+                        </p>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: var(--spacing-md); border-top: 1px solid var(--border-color);">
+                            <span class="text-accent" style="font-weight: var(--font-semibold); font-size: var(--text-sm);">
+                                View Builds →
+                            </span>
+                            <span class="badge">
+                                {{ $technique->builds_count }} {{ Str::plural('build', $technique->builds_count) }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+    </div>
+</div>
+@endsection

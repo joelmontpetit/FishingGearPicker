@@ -1,0 +1,25 @@
+# Filament Resources Directory
+
+This directory is reserved for Filament admin panel resources.
+
+## Current Status
+
+The Filament 4.x resources have been removed due to API incompatibility issues.
+
+## Options
+
+### Option 1: Use Laravel Tinker (Recommended)
+See FILAMENT_ADMIN_SETUP.md for complete guide.
+
+### Option 2: Downgrade to Filament 3
+Follow instructions in ADMIN_SOLUTION.md to downgrade and recreate resources.
+
+### Option 3: Use Database Client
+Use DB Browser for SQLite or similar tools to manage database/database.sqlite directly.
+
+## Documentation
+
+- ADMIN_SOLUTION.md - Overview and solutions
+- FILAMENT_ADMIN_SETUP.md - Detailed Tinker examples
+- QUICK_REFERENCE.md - Quick command reference
+
