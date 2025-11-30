@@ -41,8 +41,8 @@
             <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-bottom: var(--spacing-xs);">
                 Recommended Builds for {{ $technique->name }}
             </h2>
-            <p class="text-muted">
-                {{ $builds->total() }} {{ Str::plural('build', $builds->total()) }} available
+            <p style="font-size: var(--text-base); color: var(--color-text-tertiary);">
+                {{ $builds->count() }} {{ Str::plural('build', $builds->count()) }} available
             </p>
         </div>
 
@@ -60,7 +60,7 @@
                         </div>
                     @endif
                     
-                    <div class="card-content">
+                    <div style="padding: var(--spacing-lg);">
                         <div style="display: flex; gap: var(--spacing-xs); margin-bottom: var(--spacing-md); flex-wrap: wrap;">
                             <span class="badge">
                                 {{ $build->species->name }}
@@ -109,12 +109,6 @@
             @endforelse
         </div>
 
-        <!-- Pagination -->
-        @if($builds->hasPages())
-            <div style="margin-top: var(--spacing-2xl);">
-                {{ $builds->links() }}
-            </div>
-        @endif
     </div>
 </div>
 @endsection
