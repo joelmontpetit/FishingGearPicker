@@ -47,8 +47,8 @@
             <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-bottom: var(--spacing-xs);">
                 Recommended Builds for {{ $species->name }}
             </h2>
-            <p class="text-muted">
-                {{ $builds->total() }} {{ Str::plural('build', $builds->total()) }} available
+            <p style="font-size: var(--text-base); color: var(--color-text-tertiary);">
+                {{ $builds->count() }} {{ Str::plural('build', $builds->count()) }} available
             </p>
         </div>
 
@@ -114,13 +114,6 @@
                 </div>
             @endforelse
         </div>
-
-        <!-- Pagination -->
-        @if($builds->hasPages())
-            <div style="margin-top: var(--spacing-2xl);">
-                {{ $builds->links() }}
-            </div>
-        @endif
     </div>
 </div>
 @endsection
