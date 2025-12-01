@@ -377,17 +377,63 @@
 }
 
 /* ========================================
-   15. RESPONSIVE UTILITIES
+   15. MOBILE BURGER MENU
+   ======================================== */
+
+.mobile-burger-btn {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.mobile-burger-btn span {
+    width: 24px;
+    height: 2px;
+    background: var(--color-text-primary);
+    transition: all 0.3s ease;
+    display: block;
+}
+
+/* ========================================
+   16. RESPONSIVE UTILITIES
    ======================================== */
 
 @media (max-width: 767px) {
     .hide-mobile {
         display: none !important;
     }
+    
+    /* Show mobile burger button */
+    .mobile-burger-btn {
+        display: flex !important;
+    }
+    
+    /* Mobile optimizations */
+    .hero-title {
+        font-size: var(--text-3xl) !important;
+    }
+    
+    .container-custom {
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
+    }
+    
+    .grid-cards {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 @media (min-width: 768px) {
     .hide-desktop {
+        display: none !important;
+    }
+    
+    /* Ensure burger button is hidden on desktop */
+    .mobile-burger-btn {
         display: none !important;
     }
 }
