@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BuildResource\Pages;
 use App\Models\Build;
+use App\Models\Product;
 use App\Models\Species;
 use App\Models\Technique;
 use Filament\Forms;
@@ -90,6 +91,77 @@ class BuildResource extends Resource
                     ->keyLabel('Meta Key')
                     ->valueLabel('Meta Value')
                     ->columnSpanFull(),
+
+                Forms\Components\Section::make('Product Options')
+                    ->description('Add multiple product options for each category. Users can choose between different price tiers.')
+                    ->schema([
+                        Forms\Components\Repeater::make('productOptions')
+                            ->relationship('productOptions')
+                            ->schema([
+                                Forms\Components\Select::make('role')
+                                    ->label('Product Role')
+                                    ->options([
+                                        'rod' => 'Rod',
+                                        'reel' => 'Reel',
+                                        'line' => 'Line',
+                                        'lure' => 'Lure',
+                                        'hook' => 'Hook',
+                                        'weight' => 'Weight',
+                                        'other' => 'Other',
+                                    ])
+                                    ->required()
+                                    ->native(false)
+                                    ->columnSpan(2),
+
+                                Forms\Components\Select::make('product_id')
+                                    ->label('Product')
+                                    ->options(Product::where('is_active', true)->pluck('name', 'id'))
+                                    ->required()
+                                    ->searchable()
+                                    ->columnSpan(3),
+
+                                Forms\Components\Select::make('price_tier')
+                                    ->label('Price Tier')
+                                    ->options([
+                                        'budget' => '💰 Budget',
+                                        'mid' => '💎 Mid-Range',
+                                        'premium' => '⭐ Premium',
+                                    ])
+                                    ->required()
+                                    ->native(false)
+                                    ->columnSpan(2),
+
+                                Forms\Components\TextInput::make('sort_order')
+                                    ->label('Order')
+                                    ->numeric()
+                                    ->default(0)
+                                    ->required()
+                                    ->columnSpan(1),
+
+                                Forms\Components\Toggle::make('is_recommended')
+                                    ->label('Recommended')
+                                    ->default(false)
+                                    ->columnSpan(1),
+
+                                Forms\Components\Textarea::make('notes')
+                                    ->label('Notes (optional)')
+                                    ->rows(2)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(9)
+                            ->defaultItems(0)
+                            ->addActionLabel('Add Product Option')
+                            ->reorderable(true)
+                            ->reorderableWithButtons()
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => 
+                                isset($state['role']) && isset($state['price_tier']) 
+                                    ? ucfirst($state['role']) . ' - ' . ucfirst($state['price_tier'])
+                                    : null
+                            ),
+                    ])
+                    ->columnSpanFull()
+                    ->collapsed(false),
             ]);
     }
 
