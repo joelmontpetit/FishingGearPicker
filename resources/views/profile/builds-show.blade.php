@@ -1,8 +1,22 @@
 @extends('layouts.app')
 
 @section('title', $savedBuild->name . ' | My Builds | FishingGearPicker')
+@section('meta_description', $savedBuild->description ?? 'Custom fishing gear build for ' . $savedBuild->originalBuild->technique->name . ' targeting ' . $savedBuild->originalBuild->species->name)
+
+<!-- Open Graph Tags -->
+@if($savedBuild->is_public)
+    <meta property="og:title" content="{{ $savedBuild->name }}">
+    <meta property="og:description" content="{{ $savedBuild->description ?? 'Custom fishing gear build' }}">
+    <meta property="og:url" content="{{ route('profile.builds.show', $savedBuild->slug) }}">
+    <meta property="og:type" content="article">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ $savedBuild->name }}">
+    <meta name="twitter:description" content="{{ $savedBuild->description ?? 'Custom fishing gear build' }}">
+@endif
 
 @section('content')
+<div x-data="{ showShareModal: false, copySuccess: false }"
 <!-- Breadcrumb -->
 <div style="background: var(--color-neutral-50); border-bottom: 1px solid var(--border-color); padding: var(--spacing-md) 0;">
     <div class="container-custom">
@@ -64,8 +78,17 @@
             </div>
         </div>
 
-        @if($savedBuild->user_id === auth()->id())
-            <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-lg);">
+        <div style="display: flex; gap: var(--spacing-sm); margin-top: var(--spacing-lg); flex-wrap: wrap;">
+            @if($savedBuild->is_public)
+                <button @click="showShareModal = true" class="btn" style="display: flex; align-items: center; gap: var(--spacing-xs);">
+                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share Build
+                </button>
+            @endif
+
+            @if($savedBuild->user_id === auth()->id())
                 <a href="{{ route('builds.show', $savedBuild->originalBuild->slug) }}" class="btn">
                     View Original Build
                 </a>
@@ -76,8 +99,8 @@
                         Delete Build
                     </button>
                 </form>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>
 
@@ -177,11 +200,77 @@
     </div>
 </div>
 
+<!-- Share Modal -->
+@if($savedBuild->is_public)
+<div x-show="showShareModal" 
+     x-cloak
+     @click.self="showShareModal = false"
+     style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: var(--spacing-md);">
+    <div @click.stop 
+         style="background: white; border-radius: var(--border-radius-lg); max-width: 500px; width: 100%; box-shadow: var(--shadow-xl);">
+        
+        <!-- Modal Header -->
+        <div style="padding: var(--spacing-xl); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900);">
+                Share This Build
+            </h3>
+            <button @click="showShareModal = false" style="padding: var(--spacing-xs); background: none; border: none; cursor: pointer; color: var(--color-neutral-500); transition: color var(--transition-fast);" onmouseover="this.style.color='var(--color-neutral-900)'" onmouseout="this.style.color='var(--color-neutral-500)'">
+                <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div style="padding: var(--spacing-xl);">
+            <p style="font-size: var(--text-sm); color: var(--color-neutral-600); margin-bottom: var(--spacing-md);">
+                Share this build with others using the link below:
+            </p>
+            
+            <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+                <input 
+                    type="text" 
+                    readonly 
+                    value="{{ route('profile.builds.show', $savedBuild->slug) }}"
+                    id="shareLink"
+                    style="flex: 1; padding: var(--spacing-md); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); font-size: var(--text-sm); background: var(--color-neutral-50);">
+                <button 
+                    @click="
+                        navigator.clipboard.writeText('{{ route('profile.builds.show', $savedBuild->slug) }}');
+                        copySuccess = true;
+                        setTimeout(() => copySuccess = false, 2000);
+                    "
+                    class="btn"
+                    style="white-space: nowrap;">
+                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div x-show="copySuccess" x-transition style="margin-top: var(--spacing-md); background: #d1fae5; border: 1px solid #10b981; border-radius: var(--border-radius-md); padding: var(--spacing-sm);">
+                <p style="font-size: var(--text-sm); color: #10b981); font-weight: var(--font-semibold); display: flex; align-items: center; gap: var(--spacing-xs);">
+                    <svg style="width: 16px; height: 16px;" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    Link copied to clipboard!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+</div>
+
 <style>
     @media (min-width: 768px) {
         .card > div {
             grid-template-columns: 150px 1fr !important;
         }
+    }
+
+    [x-cloak] {
+        display: none !important;
     }
 </style>
 @endsection
