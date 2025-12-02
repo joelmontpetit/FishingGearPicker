@@ -44,6 +44,12 @@ Route::get('/techniques/{technique:slug}', function (Technique $technique) {
 
 // Builds Routes
 Route::get('/builds/{build:slug}', function (Build $build) {
+    $build->load([
+        'productOptions' => function($query) {
+            $query->orderBy('sort_order');
+        },
+        'productOptions.product.affiliateLinks.store'
+    ]);
     return view('builds.show', compact('build'));
 })->name('builds.show');
 

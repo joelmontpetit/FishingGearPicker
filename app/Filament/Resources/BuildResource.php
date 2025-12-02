@@ -10,6 +10,7 @@ use App\Models\Technique;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -92,7 +93,7 @@ class BuildResource extends Resource
                     ->valueLabel('Meta Value')
                     ->columnSpanFull(),
 
-                Forms\Components\Section::make('Product Options')
+                Section::make('Product Options')
                     ->description('Add multiple product options for each category. Users can choose between different price tiers.')
                     ->schema([
                         Forms\Components\Repeater::make('productOptions')

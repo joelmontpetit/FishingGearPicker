@@ -75,77 +75,133 @@
         </h2>
 
         <div style="display: flex; flex-direction: column; gap: var(--spacing-xl);">
-            @foreach($build->products as $product)
-                <div class="card">
-                    <div style="display: grid; grid-template-columns: 1fr; gap: var(--spacing-lg); padding: var(--spacing-xl);">
-                        <!-- Product Image -->
-                        <div style="width: 100%; max-width: 150px;">
-                            @if($product->image_url)
-                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: var(--border-radius-md);">
-                            @else
-                                <div style="width: 100%; height: 150px; background: linear-gradient(135deg, var(--color-neutral-200) 0%, var(--color-neutral-300) 100%); border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 3rem;">
-                                    🎣
-                                </div>
-                            @endif
-                        </div>
+            @php
+                // Group products by role
+                $productsByRole = $build->productOptions->groupBy('role');
+            @endphp
 
-                        <!-- Product Info -->
-                        <div style="flex: 1;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-sm); flex-wrap: wrap; gap: var(--spacing-sm);">
-                                <div>
-                                    <span class="badge" style="margin-bottom: var(--spacing-xs);">
-                                        {{ $product->pivot->role ?? $product->productType->name }}
-                                    </span>
-                                    <h3 style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-top: var(--spacing-xs);">
-                                        <a href="{{ route('products.show', $product->slug) }}" style="color: var(--color-neutral-900); text-decoration: none; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-neutral-900)'">
-                                            {{ $product->name }}
-                                        </a>
-                                    </h3>
-                                    <p style="font-size: var(--text-sm); color: var(--color-neutral-600); margin-top: var(--spacing-xs);">
-                                        {{ $product->brand }} {{ $product->model ? '- ' . $product->model : '' }}
-                                    </p>
-                                </div>
-
-                                @if($product->price)
-                                    <div style="text-align: right;">
-                                        <p style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900);">
-                                            ${{ number_format($product->price, 2) }}
-                                        </p>
-                                    </div>
-                                @endif
+            @foreach($productsByRole as $role => $options)
+                <div class="card" x-data="productCarousel()">
+                    <!-- Role Header with Price Tier Selector -->
+                    <div style="padding: var(--spacing-lg); border-bottom: 1px solid var(--border-color); background: var(--color-neutral-50);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
+                            <div>
+                                <span class="badge" style="margin-bottom: var(--spacing-xs);">
+                                    {{ ucfirst($role) }}
+                                </span>
+                                <h3 style="font-size: var(--text-xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-top: var(--spacing-xs);">
+                                    Choose Your {{ ucfirst($role) }}
+                                </h3>
                             </div>
 
-                            @if($product->description)
-                                <p class="text-muted" style="font-size: var(--text-base); margin-bottom: var(--spacing-md); line-height: var(--leading-relaxed);">
-                                    {{ $product->description }}
-                                </p>
-                            @endif
-
-                            @if($product->pivot->notes)
-                                <div style="background: var(--color-neutral-50); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-bottom: var(--spacing-md); border-left: 3px solid var(--color-primary);">
-                                    <p style="font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-neutral-900); margin-bottom: var(--spacing-xs);">
-                                        Why This Product:
-                                    </p>
-                                    <p style="font-size: var(--text-sm); color: var(--color-neutral-700);">
-                                        {{ $product->pivot->notes }}
-                                    </p>
-                                </div>
-                            @endif
-
-                            <!-- Affiliate Links -->
-                            @if($product->affiliateLinks->isNotEmpty())
-                                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap; padding-top: var(--spacing-md); border-top: 1px solid var(--border-color);">
-                                    @foreach($product->affiliateLinks->where('is_active', true) as $link)
-                                        <a href="{{ $link->affiliate_url }}" target="_blank" rel="nofollow noopener" class="btn btn-primary" style="font-size: var(--text-sm);">
-                                            Buy at {{ $link->store->name }} 
-                                            @if($link->price)
-                                                - ${{ number_format($link->price, 2) }}
-                                            @endif
-                                        </a>
-                                    @endforeach
-                                </div>
-                            @endif
+                            <!-- Price Tier Tabs -->
+                            <div style="display: flex; gap: var(--spacing-xs); background: white; padding: 4px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color);">
+                                @foreach($options->sortBy('sort_order')->groupBy('price_tier') as $tier => $tierOptions)
+                                    <button 
+                                        @click="currentIndex = {{ $loop->index }}"
+                                        :class="currentIndex === {{ $loop->index }} ? 'active' : ''"
+                                        class="tier-tab"
+                                        style="padding: var(--spacing-xs) var(--spacing-md); border-radius: var(--border-radius-sm); font-size: var(--text-sm); font-weight: var(--font-semibold); border: none; cursor: pointer; transition: all var(--transition-fast);">
+                                        @if($tier === 'budget')
+                                            💰 Budget
+                                        @elseif($tier === 'mid')
+                                            💎 Mid-Range
+                                        @elseif($tier === 'premium')
+                                            ⭐ Premium
+                                        @endif
+                                    </button>
+                                @endforeach
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- Product Carousel -->
+                    <div style="position: relative; overflow: hidden;">
+                        @foreach($options->sortBy('sort_order')->groupBy('price_tier') as $tier => $tierOptions)
+                            <div x-show="currentIndex === {{ $loop->index }}" 
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform translate-x-4"
+                                 x-transition:enter-end="opacity-100 transform translate-x-0"
+                                 style="padding: var(--spacing-xl);">
+                                
+                                @foreach($tierOptions as $option)
+                                    @php $product = $option->product; @endphp
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr; gap: var(--spacing-lg);" class="product-carousel-item">
+                                        <!-- Product Image -->
+                                        <div style="width: 100%; max-width: 150px;">
+                                            @if($product->image_url)
+                                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: var(--border-radius-md);">
+                                            @else
+                                                <div style="width: 100%; height: 150px; background: linear-gradient(135deg, var(--color-neutral-200) 0%, var(--color-neutral-300) 100%); border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+                                                    🎣
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        <!-- Product Info -->
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-sm); flex-wrap: wrap; gap: var(--spacing-sm);">
+                                                <div>
+                                                    @if($option->is_recommended)
+                                                        <span class="badge" style="margin-bottom: var(--spacing-xs); background: var(--color-neutral-900); color: white;">
+                                                            ⭐ Recommended
+                                                        </span>
+                                                    @endif
+                                                    <h4 style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin-top: var(--spacing-xs);">
+                                                        <a href="{{ route('products.show', $product->slug) }}" style="color: var(--color-neutral-900); text-decoration: none; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-neutral-900)'">
+                                                            {{ $product->name }}
+                                                        </a>
+                                                    </h4>
+                                                    <p style="font-size: var(--text-sm); color: var(--color-neutral-600); margin-top: var(--spacing-xs);">
+                                                        {{ $product->brand }} {{ $product->model ? '- ' . $product->model : '' }}
+                                                    </p>
+                                                </div>
+
+                                                @if($product->price)
+                                                    <div style="text-align: right;">
+                                                        <p style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900);">
+                                                            ${{ number_format($product->price, 2) }}
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            @if($product->description)
+                                                <p class="text-muted" style="font-size: var(--text-base); margin-bottom: var(--spacing-md); line-height: var(--leading-relaxed);">
+                                                    {{ $product->description }}
+                                                </p>
+                                            @endif
+
+                                            @if($option->notes)
+                                                <div style="background: var(--color-neutral-50); padding: var(--spacing-md); border-radius: var(--border-radius-md); margin-bottom: var(--spacing-md); border-left: 3px solid var(--color-neutral-900);">
+                                                    <p style="font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-neutral-900); margin-bottom: var(--spacing-xs);">
+                                                        Why This Product:
+                                                    </p>
+                                                    <p style="font-size: var(--text-sm); color: var(--color-neutral-700);">
+                                                        {{ $option->notes }}
+                                                    </p>
+                                                </div>
+                                            @endif
+
+                                            <!-- Affiliate Links -->
+                                            @if($product->affiliateLinks->isNotEmpty())
+                                                <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap; padding-top: var(--spacing-md); border-top: 1px solid var(--border-color);">
+                                                    @foreach($product->affiliateLinks->where('is_active', true) as $link)
+                                                        <a href="{{ $link->affiliate_url }}" target="_blank" rel="nofollow noopener" class="btn" style="font-size: var(--text-sm);">
+                                                            Buy at {{ $link->store->name }} 
+                                                            @if($link->price)
+                                                                - ${{ number_format($link->price, 2) }}
+                                                            @endif
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             @endforeach
@@ -155,9 +211,32 @@
 
 <style>
     @media (min-width: 768px) {
-        .card > div {
+        .product-carousel-item {
             grid-template-columns: 150px 1fr !important;
         }
     }
+
+    .tier-tab {
+        background: white;
+        color: var(--color-neutral-600);
+    }
+
+    .tier-tab:hover {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-900);
+    }
+
+    .tier-tab.active {
+        background: var(--color-neutral-900);
+        color: white;
+    }
 </style>
+
+<script>
+    function productCarousel() {
+        return {
+            currentIndex: 0
+        }
+    }
+</script>
 @endsection

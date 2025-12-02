@@ -57,13 +57,13 @@
 ## 🔄 In Progress
 
 ### Frontend Carousel Component
-- [ ] Create Blade component for product options
-- [ ] Add Alpine.js for carousel logic
-- [ ] Desktop: Left/right arrows
-- [ ] Mobile: Swipe detection
-- [ ] Dots indicator (1 of 3)
-- [ ] Show current product details
-- [ ] Price tier badge display
+- ✅ Create Blade component for product options
+- ✅ Add Alpine.js for carousel logic
+- ✅ Price tier tabs (Budget/Mid/Premium)
+- ✅ Show current product details
+- ✅ Price tier badge display
+- ✅ Smooth transitions between options
+- [ ] Mobile: Swipe detection (enhancement)
 
 ### Multiple Lures Feature
 - [ ] "Add Lure" button
