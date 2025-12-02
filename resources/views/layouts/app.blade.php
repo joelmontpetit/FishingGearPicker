@@ -68,6 +68,9 @@
                             <a href="{{ route('dashboard') }}" style="display: block; padding: 10px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-100)'" onmouseout="this.style.background='transparent'">
                                 Dashboard
                             </a>
+                            <a href="{{ route('profile.builds') }}" style="display: block; padding: 10px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-100)'" onmouseout="this.style.background='transparent'">
+                                My Builds
+                            </a>
                             <a href="{{ route('profile.edit') }}" style="display: block; padding: 10px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-100)'" onmouseout="this.style.background='transparent'">
                                 Profile
                             </a>
@@ -121,6 +124,9 @@
                 @auth
                     <a href="{{ route('dashboard') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
                         Dashboard
+                    </a>
+                    <a href="{{ route('profile.builds') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                        My Builds
                     </a>
                     <a href="{{ route('profile.edit') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
                         Profile

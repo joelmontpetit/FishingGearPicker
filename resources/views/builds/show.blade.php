@@ -5,6 +5,7 @@
 @section('meta_keywords', $build->meta_tags['keywords'] ?? '')
 
 @section('content')
+<div x-data="buildPage()">
 <!-- Breadcrumb -->
 <div style="background: var(--color-neutral-50); border-bottom: 1px solid var(--border-color); padding: var(--spacing-md) 0;">
     <div class="container-custom">
@@ -57,12 +58,33 @@
                 {{ number_format($build->views_count) }} views
             </div>
 
-            @if($build->total_price)
-                <div style="text-align: right;">
-                    <p style="font-size: var(--text-sm); color: var(--color-neutral-600); margin-bottom: var(--spacing-xs);">Total Price</p>
-                    <p style="font-size: var(--text-4xl); font-weight: var(--font-bold); color: var(--color-neutral-900);">${{ number_format($build->total_price, 2) }}</p>
-                </div>
-            @endif
+            <div style="display: flex; align-items: center; gap: var(--spacing-md); flex-wrap: wrap;">
+                @if($build->total_price)
+                    <div style="text-align: right;">
+                        <p style="font-size: var(--text-sm); color: var(--color-neutral-600); margin-bottom: var(--spacing-xs);">Total Price</p>
+                        <p style="font-size: var(--text-4xl); font-weight: var(--font-bold); color: var(--color-neutral-900);">${{ number_format($build->total_price, 2) }}</p>
+                    </div>
+                @endif
+
+                @auth
+                    <button 
+                        @click="showSaveModal = true"
+                        class="btn"
+                        style="display: flex; align-items: center; gap: var(--spacing-xs);">
+                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                        </svg>
+                        Save This Build
+                    </button>
+                @else
+                    <a href="{{ route('login') }}" class="btn" style="display: flex; align-items: center; gap: var(--spacing-xs);">
+                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                        </svg>
+                        Login to Save Build
+                    </a>
+                @endauth
+            </div>
         </div>
     </div>
 </div>
@@ -209,6 +231,121 @@
     </div>
 </div>
 
+<!-- Save Build Modal -->
+@auth
+<div x-show="showSaveModal" 
+     x-cloak
+     @click.self="showSaveModal = false"
+     style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: var(--spacing-md);">
+    <div @click.stop 
+         style="background: white; border-radius: var(--border-radius-lg); max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-xl);">
+        
+        <!-- Modal Header -->
+        <div style="padding: var(--spacing-xl); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: var(--text-2xl); font-weight: var(--font-bold); color: var(--color-neutral-900);">
+                Save Your Custom Build
+            </h3>
+            <button @click="showSaveModal = false" style="padding: var(--spacing-xs); background: none; border: none; cursor: pointer; color: var(--color-neutral-500); transition: color var(--transition-fast);" onmouseover="this.style.color='var(--color-neutral-900)'" onmouseout="this.style.color='var(--color-neutral-500)'">
+                <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <form @submit.prevent="saveBuild" style="padding: var(--spacing-xl);">
+            <div style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+                <!-- Build Name -->
+                <div>
+                    <label style="display: block; font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-neutral-900); margin-bottom: var(--spacing-xs);">
+                        Build Name <span style="color: var(--color-neutral-500);">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        x-model="saveForm.name"
+                        required
+                        placeholder="e.g., My Carolina Rig Setup"
+                        style="width: 100%; padding: var(--spacing-md); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); font-size: var(--text-base);">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label style="display: block; font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-neutral-900); margin-bottom: var(--spacing-xs);">
+                        Notes (Optional)
+                    </label>
+                    <textarea 
+                        x-model="saveForm.description"
+                        rows="3"
+                        placeholder="Add any notes about your build choices..."
+                        style="width: 100%; padding: var(--spacing-md); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); font-size: var(--text-base); resize: vertical;"></textarea>
+                </div>
+
+                <!-- Public/Private -->
+                <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
+                    <input 
+                        type="checkbox" 
+                        x-model="saveForm.is_public"
+                        id="is_public"
+                        style="width: 20px; height: 20px; cursor: pointer;">
+                    <label for="is_public" style="font-size: var(--text-sm); color: var(--color-neutral-700); cursor: pointer;">
+                        Make this build public (others can view it)
+                    </label>
+                </div>
+
+                <!-- Selected Products Summary -->
+                <div style="background: var(--color-neutral-50); padding: var(--spacing-md); border-radius: var(--border-radius-md); border: 1px solid var(--border-color);">
+                    <h4 style="font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-neutral-900); margin-bottom: var(--spacing-sm);">
+                        Selected Products:
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--spacing-xs);">
+                        <template x-for="(selection, role) in selectedProducts" :key="role">
+                            <li style="font-size: var(--text-sm); color: var(--color-neutral-700);">
+                                <span style="font-weight: var(--font-semibold);" x-text="role"></span>: 
+                                <span x-text="selection.name"></span>
+                            </li>
+                        </template>
+                    </ul>
+                    <div style="margin-top: var(--spacing-md); padding-top: var(--spacing-md); border-top: 1px solid var(--border-color);">
+                        <span style="font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-neutral-900);">Total Price: </span>
+                        <span style="font-size: var(--text-lg); font-weight: var(--font-bold); color: var(--color-neutral-900);" x-text="'$' + totalPrice.toFixed(2)"></span>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div x-show="saveError" style="background: #fee2e2; border: 1px solid #dc2626; border-radius: var(--border-radius-md); padding: var(--spacing-md);">
+                    <p style="font-size: var(--text-sm); color: #dc2626;" x-text="saveError"></p>
+                </div>
+
+                <!-- Success Message -->
+                <div x-show="saveSuccess" style="background: #d1fae5; border: 1px solid #10b981; border-radius: var(--border-radius-md); padding: var(--spacing-md);">
+                    <p style="font-size: var(--text-sm); color: #10b981;">Build saved successfully!</p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div style="display: flex; justify-content: flex-end; gap: var(--spacing-sm); margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color);">
+                <button 
+                    type="button"
+                    @click="showSaveModal = false"
+                    class="btn"
+                    style="background: var(--color-neutral-200); color: var(--color-neutral-700);">
+                    Cancel
+                </button>
+                <button 
+                    type="submit"
+                    class="btn"
+                    :disabled="saving"
+                    style="background: var(--color-neutral-900); color: white;">
+                    <span x-show="!saving">Save Build</span>
+                    <span x-show="saving">Saving...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endauth
+</div>
+
 <style>
     @media (min-width: 768px) {
         .product-carousel-item {
@@ -230,9 +367,127 @@
         background: var(--color-neutral-900);
         color: white;
     }
+
+    [x-cloak] {
+        display: none !important;
+    }
 </style>
 
 <script>
+    function buildPage() {
+        return {
+            // Carousel state per role
+            carousels: {},
+            
+            // Save modal state
+            showSaveModal: false,
+            saving: false,
+            saveError: '',
+            saveSuccess: false,
+            
+            // Save form data
+            saveForm: {
+                name: '{{ $build->name }} - Custom',
+                description: '',
+                is_public: false,
+                original_build_id: {{ $build->id }}
+            },
+
+            // Selected products (tracking user's choices)
+            selectedProducts: {},
+            totalPrice: 0,
+
+            init() {
+                // Initialize selected products from default/recommended options
+                this.initializeSelections();
+            },
+
+            initializeSelections() {
+                const productsByRole = @json($build->productOptions->groupBy('role'));
+                
+                for (const [role, options] of Object.entries(productsByRole)) {
+                    // Find recommended or first option
+                    const recommended = options.find(opt => opt.is_recommended);
+                    const defaultOption = recommended || options[0];
+                    
+                    if (defaultOption) {
+                        this.selectedProducts[role] = {
+                            product_id: defaultOption.product_id,
+                            role: role,
+                            name: defaultOption.product.name,
+                            price: defaultOption.product.price || 0,
+                            quantity: 1
+                        };
+                    }
+                }
+                
+                this.calculateTotalPrice();
+            },
+
+            selectProduct(role, product, tierIndex) {
+                this.selectedProducts[role] = {
+                    product_id: product.id,
+                    role: role,
+                    name: product.name,
+                    price: product.price || 0,
+                    quantity: 1
+                };
+                this.calculateTotalPrice();
+            },
+
+            calculateTotalPrice() {
+                this.totalPrice = Object.values(this.selectedProducts).reduce((sum, product) => {
+                    return sum + (product.price * product.quantity);
+                }, 0);
+            },
+
+            async saveBuild() {
+                this.saving = true;
+                this.saveError = '';
+                this.saveSuccess = false;
+
+                // Prepare products data
+                const products = Object.values(this.selectedProducts).map(product => ({
+                    product_id: product.product_id,
+                    role: product.role,
+                    quantity: product.quantity,
+                    notes: null
+                }));
+
+                try {
+                    const response = await fetch('{{ route('profile.builds.store') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            ...this.saveForm,
+                            products: products
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        this.saveSuccess = true;
+                        setTimeout(() => {
+                            window.location.href = data.redirect_url;
+                        }, 1000);
+                    } else {
+                        this.saveError = data.message || 'Failed to save build. Please try again.';
+                    }
+                } catch (error) {
+                    this.saveError = 'An error occurred. Please try again.';
+                    console.error('Save build error:', error);
+                } finally {
+                    this.saving = false;
+                }
+            }
+        }
+    }
+
     function productCarousel() {
         return {
             currentIndex: 0
