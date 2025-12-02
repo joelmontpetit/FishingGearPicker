@@ -35,15 +35,15 @@
 </head>
 <body style="font-family: var(--font-sans); background: var(--color-neutral-50); color: var(--color-text-primary); margin: 0; padding: 0; line-height: var(--line-height-normal);">
     <!-- Navigation -->
-    <nav style="background: white; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 50;">
+    <nav style="background: white; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 50;" x-data="{ mobileMenuOpen: false }">
         <div class="container-custom" style="display: flex; justify-content: space-between; align-items: center; height: 64px;">
             <!-- Logo -->
             <a href="{{ route('home') }}" style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); text-decoration: none; letter-spacing: -0.01em;">
                 FishingGearPicker
             </a>
             
-            <!-- Navigation Links -->
-            <div style="display: flex; gap: var(--spacing-lg); align-items: center;">
+            <!-- Desktop Navigation Links -->
+            <div class="hide-mobile" style="display: flex; gap: var(--spacing-lg); align-items: center;">
                 <a href="{{ route('species.index') }}" class="link-subtle" style="font-size: 15px; font-weight: 500;">
                     Species
                 </a>
@@ -85,6 +85,57 @@
                         Login
                     </a>
                     <a href="{{ route('register') }}" class="btn" style="font-size: 14px;">
+                        Sign Up
+                    </a>
+                @endauth
+            </div>
+
+            <!-- Mobile Burger Button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="mobile-burger-btn">
+                <span :style="mobileMenuOpen ? 'transform: rotate(45deg) translateY(6px);' : ''"></span>
+                <span :style="mobileMenuOpen ? 'opacity: 0;' : ''"></span>
+                <span :style="mobileMenuOpen ? 'transform: rotate(-45deg) translateY(-6px);' : ''"></span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" 
+             x-cloak
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 transform scale-100"
+             x-transition:leave-end="opacity-0 transform scale-95"
+             style="background: white; border-top: 1px solid var(--border-color); padding: var(--spacing-md) 0;">
+            <div class="container-custom" style="display: flex; flex-direction: column; gap: var(--spacing-xs);">
+                <a href="{{ route('species.index') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                    Species
+                </a>
+                <a href="{{ route('techniques.index') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                    Techniques
+                </a>
+                
+                <div style="height: 1px; background: var(--border-color); margin: var(--spacing-sm) 0;"></div>
+                
+                @auth
+                    <a href="{{ route('dashboard') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                        Dashboard
+                    </a>
+                    <a href="{{ route('profile.edit') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                        Profile
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                        @csrf
+                        <button type="submit" style="width: 100%; text-align: left; padding: 12px 16px; background: none; border: none; color: var(--color-text-primary); font-size: 15px; font-weight: 500; cursor: pointer; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" style="padding: 12px 16px; color: var(--color-text-primary); text-decoration: none; font-size: 15px; font-weight: 500; border-radius: var(--border-radius); transition: background 0.2s;" onmouseover="this.style.background='var(--color-neutral-50)'" onmouseout="this.style.background='transparent'">
+                        Login
+                    </a>
+                    <a href="{{ route('register') }}" class="btn" style="margin: 8px 16px; text-align: center;">
                         Sign Up
                     </a>
                 @endauth
