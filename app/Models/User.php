@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -48,5 +49,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get all saved builds for this user
+     */
+    public function savedBuilds(): HasMany
+    {
+        return $this->hasMany(UserSavedBuild::class);
+    }
+
+    /**
+     * Get public saved builds for this user
+     */
+    public function publicSavedBuilds(): HasMany
+    {
+        return $this->hasMany(UserSavedBuild::class)->where('is_public', true);
     }
 }

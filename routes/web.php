@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserBuildController;
 use App\Models\Species;
 use App\Models\Technique;
 use App\Models\Build;
@@ -44,6 +45,12 @@ Route::get('/techniques/{technique:slug}', function (Technique $technique) {
 
 // Builds Routes
 Route::get('/builds/{build:slug}', function (Build $build) {
+    $build->load([
+        'productOptions' => function($query) {
+            $query->orderBy('sort_order');
+        },
+        'productOptions.product.affiliateLinks.store'
+    ]);
     return view('builds.show', compact('build'));
 })->name('builds.show');
 
@@ -62,6 +69,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // User Saved Builds
+    Route::get('/profile/builds', [UserBuildController::class, 'index'])->name('profile.builds');
+    Route::post('/profile/builds', [UserBuildController::class, 'store'])->name('profile.builds.store');
+    Route::get('/profile/builds/{savedBuild:slug}', [UserBuildController::class, 'show'])->name('profile.builds.show');
+    Route::put('/profile/builds/{savedBuild:slug}', [UserBuildController::class, 'update'])->name('profile.builds.update');
+    Route::delete('/profile/builds/{savedBuild:slug}', [UserBuildController::class, 'destroy'])->name('profile.builds.destroy');
 });
 
 // Social Authentication Routes

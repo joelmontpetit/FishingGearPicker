@@ -321,3 +321,5 @@ Le design doit respecter :
 - Les tokens OAuth ne sont pas persistés côté client (sécurité)
 - L'avatar est stocké comme URL, pas téléchargé localement
 
+
+

@@ -248,3 +248,5 @@ x-transition:enter-end="opacity-100 transform scale-100"
 **Branch**: feature/social-auth  
 **Tested**: Desktop ✅ | Mobile 📱 (pending user test)
 
+
+

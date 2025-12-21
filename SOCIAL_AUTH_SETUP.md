@@ -212,3 +212,5 @@ Le design utilise le système de design Garmin défini dans `resources/css/app.c
 - [Google OAuth 2.0 Documentation](https://developers.google.com/identity/protocols/oauth2)
 - [Facebook Login Documentation](https://developers.facebook.com/docs/facebook-login)
 
+
+

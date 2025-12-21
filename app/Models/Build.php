@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Build extends Model
@@ -65,7 +66,7 @@ class Build extends Model
     }
 
     /**
-     * Get all products in this build
+     * Get all products in this build (legacy pivot table)
      */
     public function products(): BelongsToMany
     {
@@ -73,6 +74,46 @@ class Build extends Model
             ->withPivot(['role', 'quantity', 'sort_order', 'notes'])
             ->withTimestamps()
             ->orderBy('build_product.sort_order');
+    }
+
+    /**
+     * Get all product options for this build (new system)
+     */
+    public function productOptions(): HasMany
+    {
+        return $this->hasMany(BuildProductOption::class);
+    }
+
+    /**
+     * Get product options by role
+     */
+    public function getOptionsByRole(string $role)
+    {
+        return $this->productOptions()
+            ->where('role', $role)
+            ->with('product')
+            ->ordered()
+            ->get();
+    }
+
+    /**
+     * Get recommended product for a role
+     */
+    public function getRecommendedOption(string $role)
+    {
+        return $this->productOptions()
+            ->where('role', $role)
+            ->where('is_recommended', true)
+            ->with('product')
+            ->first();
+    }
+
+    /**
+     * Get all user saved builds based on this build
+     */
+    public function savedBuilds(): HasMany
+    {
+        return $this->hasMany(UserSavedBuild::class);
     }
 
     /**
