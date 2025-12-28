@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Store;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -78,6 +79,50 @@ class ProductResource extends Resource
                 Forms\Components\KeyValue::make('meta_tags')
                     ->keyLabel('Meta Key')
                     ->valueLabel('Meta Value')
+                    ->columnSpanFull(),
+
+                Forms\Components\Placeholder::make('affiliate_links_header')
+                    ->label('Affiliate Links')
+                    ->content('Manage affiliate purchase links for this product from stores like Amazon, Bass Pro Shops, etc.')
+                    ->columnSpanFull(),
+
+                Forms\Components\Repeater::make('affiliateLinks')
+                    ->relationship('affiliateLinks')
+                    ->schema([
+                        Forms\Components\Select::make('store_id')
+                            ->label('Store')
+                            ->options(Store::pluck('name', 'id'))
+                            ->required()
+                            ->searchable()
+                            ->columnSpan(1),
+
+                        Forms\Components\TextInput::make('affiliate_url')
+                            ->label('Affiliate URL')
+                            ->url()
+                            ->required()
+                            ->maxLength(500)
+                            ->columnSpan(2),
+
+                        Forms\Components\TextInput::make('price')
+                            ->label('Price at Store')
+                            ->numeric()
+                            ->prefix('$')
+                            ->step(0.01)
+                            ->columnSpan(1),
+
+                        Forms\Components\Toggle::make('is_active')
+                            ->label('Active')
+                            ->default(true)
+                            ->columnSpan(1),
+                    ])
+                    ->columns(5)
+                    ->defaultItems(0)
+                    ->addActionLabel('Add Affiliate Link')
+                    ->reorderable(false)
+                    ->collapsible()
+                    ->itemLabel(fn (array $state): ?string => 
+                        Store::find($state['store_id'])?->name ?? 'New Link'
+                    )
                     ->columnSpanFull(),
             ]);
     }
