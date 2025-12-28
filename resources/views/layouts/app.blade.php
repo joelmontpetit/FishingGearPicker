@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- SEO Meta Tags -->
-    <title>{{ $seoMeta->meta_title ?? config('app.name', 'FishingGearPicker') }}</title>
+    <title>{{ $seoMeta->meta_title ?? config('app.name', 'FishingGearSetups.com') }}</title>
     <meta name="description" content="{{ $seoMeta->meta_description ?? 'Découvrez les meilleures recommandations d\'équipement de pêche' }}">
     @if(isset($seoMeta->meta_keywords))
         <meta name="keywords" content="{{ $seoMeta->meta_keywords }}">
@@ -19,6 +19,7 @@
         <meta property="og:image" content="{{ $seoMeta->og_image }}">
     @endif
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="{{ $seoMeta->twitter_card ?? 'summary_large_image' }}">
@@ -39,7 +40,7 @@
         <div class="container-custom" style="display: flex; justify-content: space-between; align-items: center; height: 64px;">
             <!-- Logo -->
             <a href="{{ route('home') }}" style="font-size: 20px; font-weight: 700; color: var(--color-text-primary); text-decoration: none; letter-spacing: -0.01em;">
-                FishingGearPicker
+                FishingGearSetups.com
             </a>
             
             <!-- Desktop Navigation Links -->
@@ -160,7 +161,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-xl);">
                 <!-- About -->
                 <div>
-                    <h3 style="font-size: 18px; font-weight: 600; margin: 0 0 var(--spacing-md) 0;">FishingGearPicker</h3>
+                    <h3 style="font-size: 18px; font-weight: 600; margin: 0 0 var(--spacing-md) 0;">FishingGearSetups.com</h3>
                     <p style="font-size: 14px; color: var(--color-text-tertiary); line-height: 1.6; margin: 0;">
                         Discover the best fishing gear recommendations for all techniques and species.
                     </p>
@@ -191,7 +192,7 @@
             <!-- Copyright -->
             <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-color); text-align: center;">
                 <p style="font-size: 13px; color: var(--color-text-tertiary); margin: 0;">
-                    © {{ date('Y') }} FishingGearPicker. All rights reserved.
+                    © {{ date('Y') }} FishingGearSetups.com. All rights reserved.
                 </p>
             </div>
         </div>

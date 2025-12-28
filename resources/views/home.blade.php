@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'FishingGearPicker — Fishing Gear Setups and Recommendations by Technique, Species, and Budget')
+@section('title', 'FishingGearSetups.com — Complete Fishing Gear Recommendations by Technique and Species')
 @section('meta_description', 'Find complete fishing gear setups built for your technique and target species. Compare budget, mid-range, and premium options, then save and share your build with confidence.')
 
 @section('content')
@@ -173,21 +173,21 @@
     <div class="container-custom">
         <article style="max-width: 900px; margin: 0 auto;">
             <p style="font-size: var(--text-lg); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-xl) 0;">
-                Choosing fishing gear should be exciting—not confusing. Yet most anglers end up piecing together a rod, reel, line, terminal tackle, and lures from a dozen different opinions. One person says “medium-heavy everything.” Another swears by braid only. Someone else recommends a reel size that doesn’t balance your rod, or a lure weight that never loads the blank. The result is a setup that feels awkward, casts poorly, and costs more than it should.
+                Choosing fishing gear should be exciting—not confusing. Yet most anglers end up piecing together a rod, reel, line, terminal tackle, and lures from a dozen different opinions. One person says "medium-heavy everything." Another swears by braid only. Someone else recommends a reel size that doesn't balance your rod, or a lure weight that never loads the blank. The result is a setup that feels awkward, casts poorly, and costs more than it should.
             </p>
             <p style="font-size: var(--text-lg); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-2xl) 0;">
-                FishingGearPicker fixes that by giving you complete fishing gear setups (“builds”) designed around what actually matters: the technique you’re fishing, the species you’re targeting, and the budget you’re comfortable with. Each build shows compatible options (Budget, Mid-Range, Premium), clear gear roles, and straightforward buy links from trusted retailers—so you can stop guessing and start fishing.
+                FishingGearSetups.com fixes that by giving you complete fishing gear setups ("builds") designed around what actually matters: the technique you're fishing, the species you're targeting, and the budget you're comfortable with. Each build shows compatible options (Budget, Mid-Range, Premium), clear gear roles, and straightforward buy links from trusted retailers—so you can stop guessing and start fishing.
             </p>
 
-            <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">What is FishingGearPicker?</h2>
+            <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">What is FishingGearSetups.com?</h2>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-lg) 0;">
-                FishingGearPicker is like a PCPartPicker-style platform for fishing tackle. Instead of mixing random “top 10” lists, you browse complete, purpose-built setups that are meant to work together as a system. A build isn’t just a rod and reel combo—it’s the whole plan: rod power and action matched to the technique, reel size and gear ratio that makes sense, line type and leader choices that fit the cover and clarity, and the right terminal tackle and lure categories for the presentation.
+                FishingGearSetups.com is like a PCPartPicker-style platform for fishing tackle. Instead of mixing random "top 10" lists, you browse complete, purpose-built setups that are meant to work together as a system. A build isn't just a rod and reel combo—it's the whole plan: rod power and action matched to the technique, reel size and gear ratio that makes sense, line type and leader choices that fit the cover and clarity, and the right terminal tackle and lure categories for the presentation.
             </p>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-2xl) 0;">
                 You also get transparency. You can compare options by budget tier, see what changes (and why), and build your own version by selecting the pieces you prefer. If you want to keep it simple, follow the recommended path. If you want to personalize, you can customize and save your build for later.
             </p>
 
-            <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">How FishingGearPicker Works</h2>
+            <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">How FishingGearSetups.com Works</h2>
             <ol style="margin: 0 0 var(--spacing-2xl) 1.2rem; padding: 0; color: var(--color-neutral-700); line-height: var(--leading-relaxed);">
                 <li style="margin-bottom: var(--spacing-sm);"><strong>Discover</strong> a build by browsing fishing techniques or target species.</li>
                 <li style="margin-bottom: var(--spacing-sm);"><strong>Open the build</strong> to view the full gear list organized by role (rod, reel, line, leader, lures, hooks, weights, accessories).</li>
@@ -274,12 +274,12 @@
                 <li style="margin-bottom: 0;"><strong>Lure weight and terminal tackle</strong>: Your rod has an optimal range; your weights, hooks, and baits should live inside it for consistent casting and control.</li>
             </ul>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-2xl) 0;">
-                FishingGearPicker builds are designed around those connections. Instead of “random buying,” you follow a coherent system built for performance and confidence.
+                FishingGearSetups.com builds are designed around those connections. Instead of "random buying," you follow a coherent system built for performance and confidence.
             </p>
 
             <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">Save, Customize and Share Your Builds</h2>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-lg) 0;">
-                The best setup is the one that fits your water, your style, and your hands. That’s why FishingGearPicker lets you customize builds by selecting the products you prefer. As you browse options, you can add items to your personal build list and see your total update.
+                The best setup is the one that fits your water, your style, and your hands. That's why FishingGearSetups.com lets you customize builds by selecting the products you prefer. As you browse options, you can add items to your personal build list and see your total update.
             </p>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-2xl) 0;">
                 Create an account to save your build for later, keep multiple versions (like “spring finesse” and “summer cover”), and share a public link when you want feedback or want to help someone else get started.
@@ -287,13 +287,13 @@
 
             <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">Trusted Affiliate Partners</h2>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-lg) 0;">
-                FishingGearPicker is supported through affiliate links from retailers like Amazon, Bass Pro Shops, Cabela’s, and Tackle Warehouse. If you choose to buy through those links, the retailer may pay a commission. There’s no added cost to you, and it helps keep the platform running and improving.
+                FishingGearSetups.com is supported through affiliate links from retailers like Amazon, Bass Pro Shops, Cabela's, and Tackle Warehouse. If you choose to buy through those links, the retailer may pay a commission. There's no added cost to you, and it helps keep the platform running and improving.
             </p>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-2xl) 0;">
                 The philosophy is simple: recommendations come first. Builds are designed to be useful, compatible, and clear—so you can make better decisions whether you buy today or just research for later.
             </p>
 
-            <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">Who FishingGearPicker Is For</h2>
+            <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">Who FishingGearSetups.com Is For</h2>
             <div style="display: grid; grid-template-columns: 1fr; gap: var(--spacing-lg); margin: 0 0 var(--spacing-2xl) 0;">
                 <div style="background: var(--color-neutral-50); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); padding: var(--spacing-lg);">
                     <h3 style="font-size: var(--text-xl); font-weight: var(--font-bold); margin: 0 0 var(--spacing-xs) 0; color: var(--color-neutral-900);">Beginner anglers</h3>
@@ -317,7 +317,7 @@
 
             <h2 style="font-size: var(--text-3xl); font-weight: var(--font-bold); color: var(--color-neutral-900); margin: 0 0 var(--spacing-lg) 0;">The Long-Term Vision</h2>
             <p style="font-size: var(--text-base); color: var(--color-neutral-700); line-height: var(--leading-relaxed); margin: 0 0 var(--spacing-lg) 0;">
-                FishingGearPicker is built to grow into a complete planning tool for anglers. The foundation is already here—clean navigation, product pages, customizable builds, and a structured system for technique and species recommendations. From there, the roadmap expands into deeper guides and more ways to compare and learn.
+                FishingGearSetups.com is built to grow into a complete planning tool for anglers. The foundation is already here—clean navigation, product pages, customizable builds, and a structured system for technique and species recommendations. From there, the roadmap expands into deeper guides and more ways to compare and learn.
             </p>
             <ul style="margin: 0 0 var(--spacing-2xl) 1.2rem; padding: 0; color: var(--color-neutral-700); line-height: var(--leading-relaxed);">
                 <li style="margin-bottom: var(--spacing-sm);"><strong>More builds</strong> across more techniques, species, and seasonal patterns.</li>
