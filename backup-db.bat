@@ -1,11 +1,12 @@
 @echo off
 REM ============================================
-REM FishingGearPicker - Database Backup Script
+REM FishingGearSetups.com - Database Backup Script
 REM ============================================
 
 echo.
 echo ========================================
 echo   Database Backup Tool
+echo   FishingGearSetups.com
 echo ========================================
 echo.
 
@@ -47,9 +48,16 @@ echo ========================================
 echo.
 
 REM List recent backups
-echo Recent backups:
-dir /b /o-d "%BACKUP_DIR%\*.sqlite" | findstr /n "^" | findstr "^[1-5]:"
+echo Recent backups (last 10):
+echo.
+dir /b /o-d "%BACKUP_DIR%\*.sqlite" | findstr /n "^" | findstr "^[1-9]:" 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    dir /b /o-d "%BACKUP_DIR%\*.sqlite"
+)
 
+echo.
+echo [TIP] To restore a backup, use: restore-db.bat
+echo [TIP] Backup location: %BACKUP_DIR%
 echo.
 pause
 
